@@ -17,8 +17,9 @@ export const SignUp = ({ username, email, password }) => async (dispatch) => {
       email: email.trim(),
       password: password.trim(),
     });
-    if (response.data) {
-      console.log(response.data);
+    
+    if (response) {
+      console.log(response);
       dispatch({
         type: SIGNUP,
         payload: response.data,

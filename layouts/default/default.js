@@ -8,10 +8,10 @@ const Default = ({ children }) => {
     <>
       <Navbar />
       <main>
-        <Container>
+        <Container maxWidth={'100%'}>
           {children}
-          <Footer />
         </Container>
+          <Footer />
       </main>
     </>
   );

@@ -2471,6 +2471,11 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
+notiflix@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/notiflix/-/notiflix-3.0.1.tgz#da4a0f6c371eb9e08bd9643f4984f7af6e842f14"
+  integrity sha512-KdipbFspL2AgqsrWQAdvaK5Bl3/LoKojVqrsex3a+Vkz5ZMN2bWQtsDJp0UWFzL/7w/ykK8JmRFH8W4uTh3ddw==
+
 object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
