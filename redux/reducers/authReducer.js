@@ -17,7 +17,6 @@ const authReducer = (state = initialState, action) => {
       return {};
     case SIGNUP:
       return {};
-
     case CHANGEPASSWORD:
       return {};
     case FETCH_USER:

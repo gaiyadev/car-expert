@@ -27,6 +27,7 @@ export const SignUp = ({ username, email, password }) => async (dispatch) => {
   } catch (err) {
     const error = err.error;
     throw new Error(error);
+  } finally {
   }
 };
 
@@ -46,6 +47,7 @@ export const SignIn = ({ email, password }) => async (dispatch) => {
   } catch (err) {
     const error = err.error;
     throw new Error(error);
+  } finally {
   }
 };
 
