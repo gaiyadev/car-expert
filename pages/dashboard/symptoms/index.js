@@ -75,6 +75,9 @@ const Symptoms = () => {
                 title: "",
                 causes: "",
                 solutions: "",
+                carType: "",
+                yearOfManufacture: "",
+                type: "",
               }}
               validationSchema={Yup.object({
                 title: Yup.string()
@@ -91,6 +94,15 @@ const Symptoms = () => {
                 solutions: Yup.string()
                   .matches(usernameRegex, "solutions is invalid ")
                   .required("Solutions is required"),
+                carType: Yup.string()
+                  .matches(usernameRegex, "carType is invalid ")
+                  .required("Solutions is required"),
+                yearOfManufacture: Yup.string()
+                  .matches(usernameRegex, "Year of Manufacture is invalid ")
+                  .required("Year of Manufacture is required"),
+                type: Yup.string()
+                  .matches(usernameRegex, "Car name is invalid ")
+                  .required("Car name is required"),
               })}
               onSubmit={(values, actions) => {
                 console.log(values);
@@ -109,6 +121,69 @@ const Symptoms = () => {
                     errortext={props.errors.title}
                     InputProps={{
                       endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {<Person color="primary" />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+
+                  {/* Car type */}
+                  <Input
+                    type="text"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.carType}
+                    label="Car  Type"
+                    name="carType"
+                    error={props.errors.carType ? true : false}
+                    errortext={props.errors.carType}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {<Person color="primary" />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+
+                  {/* Car name */}
+                  <Input
+                    type="text"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.type}
+                    label="Car  Name"
+                    name="type"
+                    error={props.errors.type ? true : false}
+                    errortext={props.errors.type}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {<Person color="primary" />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+
+                  {/* Year of Manufacture */}
+                  <Input
+                    type="text"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.yearOfManufacture}
+                    label="year of manufacture"
+                    name="yearOfManufacture"
+                    error={props.errors.yearOfManufacture ? true : false}
+                    errortext={props.errors.yearOfManufacture}
+                    InputProps={{
+                      endAdornment: (git
                         <InputAdornment position="start">
                           <IconButton edge="end">
                             {<Person color="primary" />}
