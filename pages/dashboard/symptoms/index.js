@@ -40,20 +40,6 @@ const Symptoms = () => {
     showPassword: false,
   });
 
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-  const handleClickComfirmPassword = () => {
-    setValues({
-      ...values,
-
-      showComfirmPassword: !values.showComfirmPassword,
-    });
-  };
-
   return (
     <div className={classes.root}>
       <Head>
@@ -95,8 +81,8 @@ const Symptoms = () => {
                   .matches(usernameRegex, "solutions is invalid ")
                   .required("Solutions is required"),
                 carType: Yup.string()
-                  .matches(usernameRegex, "carType is invalid ")
-                  .required("Solutions is required"),
+                  .matches(usernameRegex, "car type is invalid ")
+                  .required("Car type is required"),
                 yearOfManufacture: Yup.string()
                   .matches(usernameRegex, "Year of Manufacture is invalid ")
                   .required("Year of Manufacture is required"),
@@ -123,7 +109,11 @@ const Symptoms = () => {
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton edge="end">
-                            {<Person color="primary" />}
+                            {
+                              <Person
+                                color={props.errors.title ? "error" : "primary"}
+                              />
+                            }
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -144,7 +134,13 @@ const Symptoms = () => {
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton edge="end">
-                            {<Person color="primary" />}
+                            {
+                              <Person
+                                color={
+                                  props.errors.carType ? "error" : "primary"
+                                }
+                              />
+                            }
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -165,7 +161,11 @@ const Symptoms = () => {
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton edge="end">
-                            {<Person color="primary" />}
+                            {
+                              <Person
+                                color={props.errors.type ? "error" : "primary"}
+                              />
+                            }
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -183,10 +183,18 @@ const Symptoms = () => {
                     error={props.errors.yearOfManufacture ? true : false}
                     errortext={props.errors.yearOfManufacture}
                     InputProps={{
-                      endAdornment: (git
+                      endAdornment: (
                         <InputAdornment position="start">
                           <IconButton edge="end">
-                            {<Person color="primary" />}
+                            {
+                              <Person
+                                color={
+                                  props.errors.yearOfManufacture
+                                    ? "error"
+                                    : "primary"
+                                }
+                              />
+                            }
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -200,7 +208,13 @@ const Symptoms = () => {
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton edge="end">
-                            {<PermDeviceInformation color="primary" />}
+                            {
+                              <PermDeviceInformation
+                                color={
+                                  props.errors.causes ? "error" : "primary"
+                                }
+                              />
+                            }
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -220,7 +234,13 @@ const Symptoms = () => {
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton edge="end">
-                            {<Label color="primary" />}
+                            {
+                              <Label
+                                color={
+                                  props.errors.solutions ? "error" : "primary"
+                                }
+                              />
+                            }
                           </IconButton>
                         </InputAdornment>
                       ),

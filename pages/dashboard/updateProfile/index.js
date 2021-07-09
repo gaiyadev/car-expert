@@ -94,7 +94,13 @@ const UpdateProfile = () => {
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton edge="end">
-                            {<Person color="primary" />}
+                            {
+                              <Person
+                                color={
+                                  props.errors.username ? "error" : "primary"
+                                }
+                              />
+                            }
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -115,7 +121,11 @@ const UpdateProfile = () => {
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton edge="end">
-                            {<Email color="primary" />}
+                            {
+                              <Email
+                                color={props.errors.email ? "error" : "primary"}
+                              />
+                            }
                           </IconButton>
                         </InputAdornment>
                       ),

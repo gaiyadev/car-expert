@@ -130,9 +130,21 @@ const ChangePassword = () => {
                             edge="end"
                           >
                             {values.currentPassword ? (
-                              <Visibility color="primary" />
+                              <Visibility
+                                color={
+                                  props.errors.currentPassword
+                                    ? "error"
+                                    : "primary"
+                                }
+                              />
                             ) : (
-                              <VisibilityOff />
+                              <VisibilityOff
+                                color={
+                                  props.errors.currentPassword
+                                    ? "error"
+                                    : "primary"
+                                }
+                              />
                             )}
                           </IconButton>
                         </InputAdornment>
@@ -158,9 +170,19 @@ const ChangePassword = () => {
                             edge="end"
                           >
                             {values.showPassword ? (
-                              <Visibility color="primary" />
+                              <Visibility
+                                color={
+                                  props.errors.password ? "error" : "primary"
+                                }
+                              />
                             ) : (
-                              <VisibilityOff />
+                              <VisibilityOff
+                                color={
+                                  props.errors.password
+                                    ? "error"
+                                    : "primary"
+                                }
+                              />
                             )}
                           </IconButton>
                         </InputAdornment>
@@ -186,9 +208,21 @@ const ChangePassword = () => {
                             edge="end"
                           >
                             {values.showComfirmPassword ? (
-                              <Visibility color="primary" />
+                              <Visibility
+                                color={
+                                  props.errors.comfirmPassword
+                                    ? "error"
+                                    : "primary"
+                                }
+                              />
                             ) : (
-                              <VisibilityOff />
+                              <VisibilityOff
+                                color={
+                                  props.errors.comfirmPassword
+                                    ? "error"
+                                    : "primary"
+                                }
+                              />
                             )}
                           </IconButton>
                         </InputAdornment>

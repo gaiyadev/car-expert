@@ -126,7 +126,13 @@ const SignUp = () => {
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton edge="end">
-                            {<Person color="primary" />}
+                            {
+                              <Person
+                                color={
+                                  props.errors.username ? "error" : "primary"
+                                }
+                              />
+                            }
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -147,7 +153,11 @@ const SignUp = () => {
                       endAdornment: (
                         <InputAdornment position="start">
                           <IconButton edge="end">
-                            {<Email color="primary" />}
+                            {
+                              <Email
+                                color={props.errors.email ? "error" : "primary"}
+                              />
+                            }
                           </IconButton>
                         </InputAdornment>
                       ),
@@ -172,9 +182,17 @@ const SignUp = () => {
                             edge="end"
                           >
                             {values.showPassword ? (
-                              <Visibility color="primary" />
+                              <Visibility
+                                color={
+                                  props.errors.password ? "error" : "primary"
+                                }
+                              />
                             ) : (
-                              <VisibilityOff color="primary" />
+                              <VisibilityOff
+                                color={
+                                  props.errors.password ? "error" : "primary"
+                                }
+                              />
                             )}
                           </IconButton>
                         </InputAdornment>
@@ -200,9 +218,21 @@ const SignUp = () => {
                             edge="end"
                           >
                             {values.showComfirmPassword ? (
-                              <Visibility color="primary" />
+                              <Visibility
+                                color={
+                                  props.errors.comfirmPassword
+                                    ? "error"
+                                    : "primary"
+                                }
+                              />
                             ) : (
-                              <VisibilityOff color="primary" />
+                              <VisibilityOff
+                                color={
+                                  props.errors.comfirmPassword
+                                    ? "error"
+                                    : "primary"
+                                }
+                              />
                             )}
                           </IconButton>
                         </InputAdornment>
