@@ -1,0 +1,13 @@
+export const SIGNIN = "SIGNIN";
+export const SIGNUP = "SIGNUP";
+export const CHANGEPASSWORD = "CHANGEPASSWORD";
+export const UPDATEPROFILE = "UPDATEPROFILE";
+export const SIGNOUT = "SIGNOUT";
+export const FETCH_ALL_USERS = "FETCH_ALL_USERS";
+export const FETCH_USER = "FETCH_USER";
+export const ADD_SYMPTOMS = "ADD_SYMPTOMS";
+export const EDIT_SYMPTOMS = "EDIT_SYMPTOMS";
+export const DELETE_SYMPTOMS = "DELETE_SYMPTOMS";
+export const FETCH_ALL_SYMPTOMS = "FETCH_ALL_SYMPTOMS";
+export const UPDATE_SYMPTOMS = "UPDATE_SYMPTOMS";
+export const FETCH_SYMPTOM = "FETCH_SYMPTOM";
