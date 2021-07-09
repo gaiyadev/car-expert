@@ -1,6 +1,13 @@
-import { SIGNIN, SIGNUP } from "../actions/types";
 import axios from "axios";
-const baseUrl = "";
+import { SIGNIN, SIGNUP } from "../actions/types";
+// const baseUrl = "";
+axios.defaults.baseURL = "";
+const token = localStorage.getItem("jwt");
+
+// headers
+const headers = {
+  Authorization: `Bearer ${token}`,
+};
 
 // SIGN UP
 export const SignUp = ({ username, email, password }) => async (dispatch) => {
@@ -10,7 +17,8 @@ export const SignUp = ({ username, email, password }) => async (dispatch) => {
       email: email.trim(),
       password: password.trim(),
     });
-    if (response) {
+    if (response.data) {
+      console.log(response.data);
       dispatch({
         type: SIGNUP,
         payload: response.data,
@@ -40,7 +48,6 @@ export const SignIn = ({ email, password }) => async (dispatch) => {
     throw new Error(error);
   }
 };
-
 
 // async function asyncFunc() {
 //   try {
