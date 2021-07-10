@@ -8,7 +8,6 @@ import VpnKeyIcon from "@material-ui/icons/VpnKey";
 import PeopleIcon from "@material-ui/icons/People";
 import EditIcon from "@material-ui/icons/Edit";
 import AllInboxIcon from "@material-ui/icons/AllInbox";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
 import Link from "next/link";
 
@@ -106,17 +105,6 @@ export const secondaryListItems = (
           <ListItemText primary="Update Profile" />
         </a>
       </Link>
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ExitToAppIcon
-          style={{
-            color: "red",
-          }}
-          onClick={() => console.log("SignOut")}
-        />
-      </ListItemIcon>
-      <ListItemText onClick={() => console.log("SignOut")} primary="SignOut" />
     </ListItem>
   </div>
 );

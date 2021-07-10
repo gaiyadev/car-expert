@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signInUser } from "../../redux/actions/authActions";
+import { signInUser, signOut } from "../../redux/actions/authActions";
+import { useRouter } from "next/router";
 import Preloader from "../../components/default/progress/loading";
 import clsx from "clsx";
 import Link2 from "next/link";
@@ -27,6 +28,7 @@ import {
   secondaryListItems,
 } from "../../components/dashboard/listItems";
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import { Notify } from "notiflix";
 
 function Copyright() {
   return (
@@ -129,8 +131,9 @@ const useStyles = makeStyles((theme) => ({
 const Dashboard = ({ children }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open2 = Boolean(anchorEl);
@@ -165,7 +168,7 @@ const Dashboard = ({ children }) => {
       }
     };
     loadedUser();
-    setUsername(user)
+    setUsername(user);
   }, [dispatch, user]);
 
   return (
@@ -233,7 +236,15 @@ const Dashboard = ({ children }) => {
                   <MenuItem onClick={handleClose}>My account</MenuItem>
                 </a>
               </Link2>
-              <MenuItem onClick={handleClose}>LogOut</MenuItem>
+              <MenuItem
+                onClick={async () => {
+                  await dispatch(signOut());
+                  router.push("/signin");
+                  Notify.success("Logout sucessfully");
+                }}
+              >
+                LogOut
+              </MenuItem>
             </Menu>
           </div>
         </Toolbar>

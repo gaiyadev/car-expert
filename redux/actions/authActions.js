@@ -6,6 +6,7 @@ import {
   FETCH_USER_DETAILS,
   CHANGEPASSWORD,
   UPDATEPROFILE,
+  SIGNOUT,
 } from "../actions/types";
 const baseUrl = "http://localhost:5000/api/v1/users";
 // const token = localStorage.getItem("jwt");
@@ -173,6 +174,21 @@ export const updateProfile = ({ email, username }) => async (dispatch) => {
   } catch (err) {
     const error = err.response;
     throw new Error(error.data.email[0]);
+  } finally {
+  }
+};
+
+// Signout
+export const signOut = () => async (dispatch) => {
+  try {
+    const storage = localStorage.clear();
+    if (storage) {
+      dispatch({
+        type: SIGNOUT,
+      });
+    }
+  } catch (error) {
+    throw new Error(error);
   } finally {
   }
 };
