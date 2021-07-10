@@ -90,6 +90,7 @@ const Home = () => {
               <Paper elevation={12} py={5} px={5}>
                 <MaterialTable
                   options={{
+                    actionsColumnIndex: -1,
                     filtering: true,
                     search: true,
                     sorting: true,
@@ -100,6 +101,14 @@ const Home = () => {
                       padding: "13px",
                     },
                   }}
+                  actions={[
+                    {
+                      icon: "visibility",
+                      tooltip: "Save User",
+                      onClick: (event, rowData) =>
+                        alert("You saved " + rowData.name),
+                    },
+                  ]}
                   columns={columns}
                   data={data}
                   title="Search car Issues"

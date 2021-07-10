@@ -1,9 +1,11 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import Head from "next/head";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { signUp } from "../../redux/actions/authActions";
 import Input from "../../components/default/form/input";
 import Button from "../../components/default/form/button";
 import Typography from "@material-ui/core/Typography";
@@ -14,7 +16,9 @@ import Visibility from "@material-ui/icons/Visibility";
 import { Person, Email } from "@material-ui/icons";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
-
+import ProgressLoader from "../../components/default/progress/loading";
+import ErrorAlert from "../../components/default/form/errorAlert";
+import SuccessAlert from "../../components/default/form/successAlert";
 // regex
 const usernameRegex = /^[A-Za-z]+$/;
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -37,11 +41,15 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [values, setValues] = React.useState({
     showComfirmPassword: false,
     showPassword: false,
   });
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [message, setMessage] = React.useState("");
 
   const handleClickShowPassword = () => {
     setValues({
@@ -68,11 +76,21 @@ const SignUp = () => {
         <Grid item xs={12} md={3} sm={12}></Grid>
         <Grid item xs={12} md={6} sm={12}>
           <Card className={classes.card}>
-            <Box py={5}>
+            <Box py={3}>
               <Typography variant="h4" color="primary" align="left">
                 Sign Up
               </Typography>
             </Box>
+            <Box py={3}>
+              {error ? (
+                <ErrorAlert title={error} />
+              ) : message ? (
+                <SuccessAlert title={message} />
+              ) : (
+                ""
+              )}
+            </Box>
+
             <Formik
               initialValues={{
                 username: "",
@@ -107,8 +125,18 @@ const SignUp = () => {
                   )
                   .required("Comfirm password is required"),
               })}
-              onSubmit={(values, actions) => {
-                console.log(values);
+              onSubmit={async (values) => {
+                try {
+                  setIsLoading(true);
+                  setError("");
+                  await dispatch(signUp(values));
+                  setIsLoading(false);
+                  setMessage("Account created successfully");
+                } catch (err) {
+                  setMessage("");
+                  setError(err.message);
+                  setIsLoading(false);
+                }
               }}
             >
               {(props) => (
@@ -240,7 +268,11 @@ const SignUp = () => {
                     }}
                   />
 
-                  <Button label="Sign Up" type="submit" />
+                  <Button
+                    label={isLoading ? <ProgressLoader /> : "Sign Up"}
+                    type="submit"
+                    onClick={props.handleSubmit}
+                  />
                 </form>
               )}
             </Formik>

@@ -14,7 +14,7 @@ const CircularIndeterminate = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <CircularProgress color="primary" />
+      <CircularProgress color="error" />
     </div>
   );
 };
