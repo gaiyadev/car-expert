@@ -271,7 +271,6 @@ const SignUp = () => {
                   <Button
                     label={isLoading ? <ProgressLoader /> : "Sign Up"}
                     type="submit"
-                    onClick={props.handleSubmit}
                   />
                 </form>
               )}

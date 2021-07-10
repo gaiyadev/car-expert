@@ -1,5 +1,6 @@
 import React from "react";
 import Head from "next/head";
+import { useDispatch } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
@@ -16,7 +17,11 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { signIn } from "../../redux/actions/authActions";
+import ProgressLoader from "../../components/default/progress/loading";
 
+import ErrorAlert from "../../components/default/form/errorAlert";
+import SuccessAlert from "../../components/default/form/successAlert";
 // regex
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 const passwordRegex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
@@ -37,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignIn = () => {
+  const dispatch = useDispatch();
+
   const classes = useStyles();
   const [values, setValues] = React.useState({
     showComfirmPassword: false,
@@ -50,7 +57,9 @@ const SignIn = () => {
       showPassword: !values.showPassword,
     });
   };
-
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [message, setMessage] = React.useState("");
   return (
     <div className={classes.root}>
       <Head>
@@ -66,6 +75,15 @@ const SignIn = () => {
               <Typography variant="h4" color="primary" align="left">
                 Sign In
               </Typography>
+            </Box>
+            <Box py={3}>
+              {error ? (
+                <ErrorAlert title={error} />
+              ) : message ? (
+                <SuccessAlert title={message} />
+              ) : (
+                ""
+              )}
             </Box>
             <Formik
               initialValues={{
@@ -85,8 +103,18 @@ const SignIn = () => {
                   )
                   .required("Password is required"),
               })}
-              onSubmit={(values, actions) => {
-                console.log(values);
+              onSubmit={async (values) => {
+                try {
+                  setIsLoading(true);
+                  setError("");
+                  await dispatch(signIn(values));
+                  setIsLoading(false);
+                  setMessage("Login successfully");
+                } catch (err) {
+                  setMessage("");
+                  setError(err.message);
+                  setIsLoading(false);
+                }
               }}
             >
               {(props) => (
@@ -166,7 +194,10 @@ const SignIn = () => {
                     label="Remember me"
                   />
 
-                  <Button label="Sign In" type="submit" />
+                  <Button
+                    label={isLoading ? <ProgressLoader /> : "Sign In"}
+                    type="submit"
+                  />
                 </form>
               )}
             </Formik>

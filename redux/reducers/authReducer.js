@@ -1,4 +1,3 @@
-import { PlaylistAddOutlined } from "@material-ui/icons";
 import {
   SIGNIN,
   SIGNUP,
@@ -10,17 +9,16 @@ import {
 const initialState = {
   token: null,
   user: {},
-  message: "",
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case SIGNIN:
-      return {};
-    case SIGNUP:
       return {
-        user: action.payload,
+        ...state,
       };
+    case SIGNUP:
+      return {};
     case CHANGEPASSWORD:
       return {};
     case FETCH_USER:

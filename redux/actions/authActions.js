@@ -1,17 +1,15 @@
 import axios from "axios";
 import { SIGNIN, SIGNUP } from "../actions/types";
 const baseUrl = "http://localhost:5000/api/v1/users";
-// axios.defaults.baseURL = "";
 // const token = localStorage.getItem("jwt");
 
 // headers
 const headers = {
-  // Authorization: `Bearer ${token}`,
+  "Content-Type": "application/json",
 };
 
 // SIGN UP
 export const signUp = ({ username, email, password }) => async (dispatch) => {
-  console.log("redux is seeen");
   try {
     const response = await axios.post(`${baseUrl}/signup`, {
       username: username.trim(),
@@ -34,21 +32,23 @@ export const signUp = ({ username, email, password }) => async (dispatch) => {
 };
 
 // Sign in
-export const SignIn = ({ email, password }) => async (dispatch) => {
+export const signIn = ({ email, password }) => async (dispatch) => {
   try {
-    const response = await axios.post(`${baseUrl}/api/v1/signin`, {
-      email: email.trim(),
-      password: password.trim(),
+    const response = await axios.post(`${baseUrl}/signin`, {
+      email: email,
+      password: password,
     });
-    if (response) {
+
+    if (response.status === 200) {
+      console.log(response);
       dispatch({
         type: SIGNIN,
         payload: response.data,
       });
     }
   } catch (err) {
-    const error = err.error;
-    throw new Error(error);
+    const error = err.response;
+    throw new Error(error.data.error);
   } finally {
   }
 };
