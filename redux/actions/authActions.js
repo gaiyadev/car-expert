@@ -5,6 +5,7 @@ import {
   FETCH_USER,
   FETCH_USER_DETAILS,
   CHANGEPASSWORD,
+  UPDATEPROFILE,
 } from "../actions/types";
 const baseUrl = "http://localhost:5000/api/v1/users";
 // const token = localStorage.getItem("jwt");
@@ -141,6 +142,37 @@ export const signInUserInfo = () => async (dispatch) => {
   } catch (err) {
     const error = err.response;
     throw new Error(error.data.error);
+  } finally {
+  }
+};
+
+// update profil
+export const updateProfile = ({ email, username }) => async (dispatch) => {
+  const token = localStorage.getItem("jwt");
+  try {
+    const response = await axios.put(
+      `${baseUrl}/updateDetails`,
+      {
+        email: email,
+        username: username,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 201) {
+      const user = response.data.message;
+      dispatch({
+        type: UPDATEPROFILE,
+        payload: user,
+      });
+    }
+  } catch (err) {
+    const error = err.response;
+    throw new Error(error.data.email[0]);
   } finally {
   }
 };

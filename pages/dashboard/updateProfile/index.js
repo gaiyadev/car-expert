@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signInUserInfo } from "../../../redux/actions/authActions";
+import {
+  signInUserInfo,
+  updateProfile,
+  signInUser,
+} from "../../../redux/actions/authActions";
 import Head from "next/head";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
@@ -14,7 +18,9 @@ import Card from "@material-ui/core/Card";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { Person, Email } from "@material-ui/icons";
 import IconButton from "@material-ui/core/IconButton";
-
+import Preloader from "../../../components/default/progress/loading";
+import ErrorAlert from "../../../components/default/form/errorAlert";
+import SuccessAlert from "../../../components/default/form/successAlert";
 // regex
 const usernameRegex = /^[A-Za-z]+$/;
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -38,9 +44,10 @@ const UpdateProfile = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState(null);
-
   const user = useSelector((state) => state.auth.userData);
+  const { username, email } = user;
+  const [error, setError] = React.useState("");
+  const [message, setMessage] = React.useState("");
 
   useEffect(() => {
     const loadedUser = async () => {
@@ -54,11 +61,7 @@ const UpdateProfile = () => {
       }
     };
     loadedUser();
-    setData(user);
-    console.log(user, data);
-    console.log("ffgfg", data);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [dispatch, username, email]);
 
   return (
     <div className={classes.root}>
@@ -70,93 +73,123 @@ const UpdateProfile = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={3} sm={12}></Grid>
         <Grid item xs={12} md={6} sm={12}>
-          <Card className={classes.card}>
-            <Box>
-              <Typography variant="h4" color="primary" align="left">
-                Update Profile
-              </Typography>
-            </Box>
-            <Formik
-              initialValues={{
-                username: "",
-                email: "",
-              }}
-              validationSchema={Yup.object({
-                username: Yup.string()
-                  .min(3, "Username must be atleast 3 characters")
-                  .max(20, "Username is too Long!")
-                  .matches(
-                    usernameRegex,
-                    "Only alphabets are allowed for this field "
-                  )
-                  .required("Username is required"),
-                email: Yup.string()
-                  .email("Email is invalid")
-                  .matches(emailRegex, "Email is invalid ")
-                  .required("Email is required"),
-              })}
-              onSubmit={(values, actions) => {
-                console.log(values);
-              }}
-            >
-              {(props) => (
-                <form onSubmit={props.handleSubmit}>
-                  <Input
-                    type="text"
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    value={props.values.username}
-                    label="Username"
-                    name="username"
-                    error={props.errors.username ? true : false}
-                    errortext={props.errors.username}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton edge="end">
-                            {
-                              <Person
-                                color={
-                                  props.errors.username ? "error" : "primary"
-                                }
-                              />
-                            }
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+          {isLoading ? (
+            <Preloader />
+          ) : (
+            <Card className={classes.card}>
+              <Box py={5}>
+                <Typography variant="h4" color="primary" align="left">
+                  Update Profile
+                </Typography>
+              </Box>
+              <Box py={3}>
+                {error ? (
+                  <ErrorAlert title={error} />
+                ) : message ? (
+                  <SuccessAlert title={message} />
+                ) : (
+                  ""
+                )}
+              </Box>
+              <Formik
+                initialValues={{
+                  username: username,
+                  email: email,
+                }}
+                validationSchema={Yup.object({
+                  username: Yup.string()
+                    .min(3, "Username must be atleast 3 characters")
+                    .max(20, "Username is too Long!")
+                    .matches(
+                      usernameRegex,
+                      "Only alphabets are allowed for this field "
+                    )
+                    .required("Username is required"),
+                  email: Yup.string()
+                    .email("Email is invalid")
+                    .matches(emailRegex, "Email is invalid ")
+                    .required("Email is required"),
+                })}
+                onSubmit={async (values) => {
+                  try {
+                    setIsLoading(true);
+                    setError("");
+                    await dispatch(updateProfile(values));
+                    setIsLoading(false);
+                    setMessage("Profile updated successfully");
+                    await dispatch(signInUserInfo());
+                    await dispatch(signInUser());
+                  } catch (err) {
+                    setMessage("");
+                    setError(err.message);
+                    setIsLoading(false);
+                  }
+                }}
+              >
+                {(props) => (
+                  <form onSubmit={props.handleSubmit}>
+                    <Input
+                      type="text"
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      value={props.values.username}
+                      label="Username"
+                      name="username"
+                      error={props.errors.username ? true : false}
+                      errortext={props.errors.username}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="start">
+                            <IconButton edge="end">
+                              {
+                                <Person
+                                  color={
+                                    props.errors.username ? "error" : "primary"
+                                  }
+                                />
+                              }
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
 
-                  {/* email */}
-                  <Input
-                    type="email"
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    value={props.values.email}
-                    label="Email"
-                    name="email"
-                    error={props.errors.email ? true : false}
-                    errortext={props.errors.email}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton edge="end">
-                            {
-                              <Email
-                                color={props.errors.email ? "error" : "primary"}
-                              />
-                            }
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
+                    {/* email */}
+                    <Input
+                      type="email"
+                      onChange={props.handleChange}
+                      onBlur={props.handleBlur}
+                      value={props.values.email}
+                      label="Email"
+                      name="email"
+                      error={props.errors.email ? true : false}
+                      errortext={props.errors.email}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="start">
+                            <IconButton edge="end">
+                              {
+                                <Email
+                                  color={
+                                    props.errors.email ? "error" : "primary"
+                                  }
+                                />
+                              }
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
 
-                  <Button label="Update Profile" type="submit" />
-                </form>
-              )}
-            </Formik>
-          </Card>
+                    <Button
+                      label={isLoading ? <Preloader /> : "Update Profile"}
+                      type="submit"
+                    />
+                  </form>
+                )}
+              </Formik>
+            </Card>
+          )}
         </Grid>
         <Grid item xs={12} md={3} sm={12}></Grid>
       </Grid>

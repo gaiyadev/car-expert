@@ -5,6 +5,7 @@ import {
   FETCH_USER,
   FETCH_USER_DETAILS,
   SIGNOUT,
+  UPDATEPROFILE,
 } from "../actions/types";
 
 const initialState = {
@@ -39,7 +40,11 @@ const authReducer = (state = initialState, action) => {
     case FETCH_USER_DETAILS:
       return {
         ...state,
-        userData: action.payload
+        userData: action.payload,
+      };
+    case UPDATEPROFILE:
+      return {
+        ...state,
       };
     case SIGNOUT:
       return {};
