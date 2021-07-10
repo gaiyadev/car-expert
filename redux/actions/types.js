@@ -5,6 +5,7 @@ export const UPDATEPROFILE = "UPDATEPROFILE";
 export const SIGNOUT = "SIGNOUT";
 export const FETCH_ALL_USERS = "FETCH_ALL_USERS";
 export const FETCH_USER = "FETCH_USER";
+export const FETCH_USER_DETAILS = "FETCH_USER_DETAILS";
 export const ADD_SYMPTOMS = "ADD_SYMPTOMS";
 export const EDIT_SYMPTOMS = "EDIT_SYMPTOMS";
 export const DELETE_SYMPTOMS = "DELETE_SYMPTOMS";

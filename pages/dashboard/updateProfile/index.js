@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signInUserInfo } from "../../../redux/actions/authActions";
 import Head from "next/head";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Input from "../../../components/default/form/input";
-import Button from "../../../components/default/form/button";import Typography from "@material-ui/core/Typography";
+import Button from "../../../components/default/form/button";
+import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Visibility from "@material-ui/icons/Visibility";
 import { Person, Email } from "@material-ui/icons";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -34,9 +36,29 @@ const useStyles = makeStyles((theme) => ({
 
 const UpdateProfile = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState(null);
 
+  const user = useSelector((state) => state.auth.userData);
 
-
+  useEffect(() => {
+    const loadedUser = async () => {
+      try {
+        setIsLoading(true);
+        await dispatch(signInUserInfo());
+        setIsLoading(false);
+      } catch (err) {
+        console.log("ER", err.message);
+        setIsLoading(false);
+      }
+    };
+    loadedUser();
+    setData(user);
+    console.log(user, data);
+    console.log("ffgfg", data);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   return (
     <div className={classes.root}>
@@ -58,8 +80,6 @@ const UpdateProfile = () => {
               initialValues={{
                 username: "",
                 email: "",
-                password: "",
-                comfirmPassword: "",
               }}
               validationSchema={Yup.object({
                 username: Yup.string()

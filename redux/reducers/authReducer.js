@@ -3,12 +3,14 @@ import {
   SIGNUP,
   CHANGEPASSWORD,
   FETCH_USER,
+  FETCH_USER_DETAILS,
   SIGNOUT,
 } from "../actions/types";
 
 const initialState = {
   token: null,
   user: {},
+  userData: {},
 };
 
 const authReducer = (state = initialState, action) => {
@@ -20,13 +22,24 @@ const authReducer = (state = initialState, action) => {
         token: localStorage.setItem("jwt", jwt),
       };
     case SIGNUP:
-      return {};
+      return {
+        ...state,
+      };
     case CHANGEPASSWORD:
-      return {};
+      return {
+        ...state,
+        token: null,
+        user: {},
+      };
     case FETCH_USER:
       return {
         ...state,
         user: action.payload,
+      };
+    case FETCH_USER_DETAILS:
+      return {
+        ...state,
+        userData: action.payload
       };
     case SIGNOUT:
       return {};

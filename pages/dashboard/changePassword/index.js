@@ -1,5 +1,10 @@
 import React from "react";
 import Head from "next/head";
+import { useDispatch } from "react-redux";
+import { changePassword } from "../../../redux/actions/authActions";
+import ProgressLoader from "../../../components/default/progress/loading";
+import ErrorAlert from "../../../components/default/form/errorAlert";
+import SuccessAlert from "../../../components/default/form/successAlert";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
@@ -11,7 +16,7 @@ import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Visibility from "@material-ui/icons/Visibility";
-import { Person, Email } from "@material-ui/icons";
+import { useRouter } from "next/router";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import IconButton from "@material-ui/core/IconButton";
 
@@ -35,12 +40,17 @@ const useStyles = makeStyles((theme) => ({
 
 const ChangePassword = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [message, setMessage] = React.useState("");
 
   const [values, setValues] = React.useState({
     showComfirmPassword: false,
     currentPassword: false,
     showPassword: false,
   });
+  const router = useRouter();
 
   const handleClickShowPassword = () => {
     setValues({
@@ -78,6 +88,15 @@ const ChangePassword = () => {
                 Change Password
               </Typography>
             </Box>
+            <Box py={3}>
+              {error ? (
+                <ErrorAlert title={error} />
+              ) : message ? (
+                <SuccessAlert title={message} />
+              ) : (
+                ""
+              )}
+            </Box>
             <Formik
               initialValues={{
                 currentPassword: "",
@@ -106,8 +125,19 @@ const ChangePassword = () => {
                   )
                   .required("Comfirm password is required"),
               })}
-              onSubmit={(values, actions) => {
-                console.log(values);
+              onSubmit={async (values) => {
+                try {
+                  setIsLoading(true);
+                  setError("");
+                  await dispatch(changePassword(values));
+                  setIsLoading(false);
+                  setMessage("Password changed successfully");
+                  router.push("/signin");
+                } catch (err) {
+                  setMessage("");
+                  setError(err.message);
+                  setIsLoading(false);
+                }
               }}
             >
               {(props) => (
@@ -178,9 +208,7 @@ const ChangePassword = () => {
                             ) : (
                               <VisibilityOff
                                 color={
-                                  props.errors.password
-                                    ? "error"
-                                    : "primary"
+                                  props.errors.password ? "error" : "primary"
                                 }
                               />
                             )}
@@ -230,7 +258,10 @@ const ChangePassword = () => {
                     }}
                   />
 
-                  <Button label="Change password" type="submit" />
+                  <Button
+                    label={isLoading ? <ProgressLoader /> : "Change password"}
+                    type="submit"
+                  />
                 </form>
               )}
             </Formik>

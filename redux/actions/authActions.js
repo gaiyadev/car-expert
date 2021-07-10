@@ -1,5 +1,11 @@
 import axios from "axios";
-import { SIGNIN, SIGNUP, FETCH_USER } from "../actions/types";
+import {
+  SIGNIN,
+  SIGNUP,
+  FETCH_USER,
+  FETCH_USER_DETAILS,
+  CHANGEPASSWORD,
+} from "../actions/types";
 const baseUrl = "http://localhost:5000/api/v1/users";
 // const token = localStorage.getItem("jwt");
 
@@ -78,14 +84,63 @@ export const signInUser = () => async (dispatch) => {
   }
 };
 
-// async function asyncFunc() {
-//   try {
-//     // fetch data from a url endpoint
-//     const response = await axios.get("/some_url_endpoint");
-//     const data = await response.json();
+// change Passwrod
 
-//     return data;
-//   } catch (error) {
-//     alert(error); // catches both errors
-//   }
-// }
+export const changePassword = ({
+  currentPassword,
+  password,
+  comfirmPassword,
+}) => async (dispatch) => {
+  const token = localStorage.getItem("jwt");
+  try {
+    const response = await axios.put(
+      `${baseUrl}/changePassword`,
+      {
+        password: currentPassword,
+        newPassword: password,
+        comfirmPassword: comfirmPassword,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 201) {
+      const user = response.data.message;
+      dispatch({
+        type: CHANGEPASSWORD,
+        payload: user,
+      });
+    }
+  } catch (err) {
+    const error = err.response;
+    throw new Error(error.data.error);
+  } finally {
+  }
+};
+
+// Get login user info
+export const signInUserInfo = () => async (dispatch) => {
+  const token = localStorage.getItem("jwt");
+  try {
+    const response = await axios.get(`${baseUrl}/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const user = response.data.user;
+      dispatch({
+        type: FETCH_USER_DETAILS,
+        payload: user,
+      });
+    }
+  } catch (err) {
+    const error = err.response;
+    throw new Error(error.data.error);
+  } finally {
+  }
+};
