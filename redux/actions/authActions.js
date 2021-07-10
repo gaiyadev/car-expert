@@ -1,11 +1,12 @@
 import axios from "axios";
-import { SIGNIN, SIGNUP } from "../actions/types";
+import { SIGNIN, SIGNUP, FETCH_USER } from "../actions/types";
 const baseUrl = "http://localhost:5000/api/v1/users";
 // const token = localStorage.getItem("jwt");
 
 // headers
 const headers = {
   "Content-Type": "application/json",
+  Authorization: "",
 };
 
 // SIGN UP
@@ -40,10 +41,34 @@ export const signIn = ({ email, password }) => async (dispatch) => {
     });
 
     if (response.status === 200) {
-      console.log(response);
+      console.log(response.data.token);
       dispatch({
         type: SIGNIN,
         payload: response.data,
+      });
+    }
+  } catch (err) {
+    const error = err.response;
+    throw new Error(error.data.error);
+  } finally {
+  }
+};
+
+// Get login user info
+export const signInUser = () => async (dispatch) => {
+  const token = localStorage.getItem("jwt");
+  try {
+    const response = await axios.get(`${baseUrl}/user`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const user = response.data.user.username;
+      dispatch({
+        type: FETCH_USER,
+        payload: user,
       });
     }
   } catch (err) {

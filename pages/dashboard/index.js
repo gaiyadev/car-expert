@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import ScoreCard from "../../components/dashboard/scoreCard";
@@ -6,7 +6,6 @@ import PeopleIcon from "@material-ui/icons/People";
 import BugReportIcon from "@material-ui/icons/BugReport";
 import MergeTypeIcon from "@material-ui/icons/MergeType";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
-
 
 const useStyles = makeStyles((theme) => ({
   root: {

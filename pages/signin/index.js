@@ -19,7 +19,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { signIn } from "../../redux/actions/authActions";
 import ProgressLoader from "../../components/default/progress/loading";
-
+import { useRouter } from "next/router";
 import ErrorAlert from "../../components/default/form/errorAlert";
 import SuccessAlert from "../../components/default/form/successAlert";
 // regex
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn = () => {
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const classes = useStyles();
   const [values, setValues] = React.useState({
     showComfirmPassword: false,
@@ -109,7 +109,8 @@ const SignIn = () => {
                   setError("");
                   await dispatch(signIn(values));
                   setIsLoading(false);
-                  setMessage("Login successfully");
+                  setMessage("Login successfully... redirecting");
+                  router.push("/dashboard");
                 } catch (err) {
                   setMessage("");
                   setError(err.message);

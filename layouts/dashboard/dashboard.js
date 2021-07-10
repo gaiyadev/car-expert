@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { signInUser } from "../../redux/actions/authActions";
+import Preloader from "../../components/default/progress/loading";
 import clsx from "clsx";
 import Link2 from "next/link";
 import { makeStyles } from "@material-ui/core/styles";
@@ -125,22 +128,46 @@ const useStyles = makeStyles((theme) => ({
 
 const Dashboard = ({ children }) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState('');
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open2 = Boolean(anchorEl);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
+
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   // const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    const loadedUser = async () => {
+      try {
+        setIsLoading(true);
+        await dispatch(signInUser());
+        setIsLoading(false);
+      } catch (err) {
+        console.log("ER", err.message);
+        setIsLoading(false);
+      }
+    };
+    loadedUser();
+    setUsername(user)
+  }, [dispatch, user]);
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -168,7 +195,7 @@ const Dashboard = ({ children }) => {
             noWrap
             className={classes.title}
           >
-            Hello, Isaac
+            Hello, {isLoading ? <Preloader /> : username}
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
