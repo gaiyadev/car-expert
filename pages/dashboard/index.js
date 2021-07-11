@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllUserInfo } from "../../redux/actions/authActions";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import ScoreCard from "../../components/dashboard/scoreCard";
@@ -20,6 +22,22 @@ const useStyles = makeStyles((theme) => ({
 
 const Home = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const loadedUser = async () => {
+      try {
+        setIsLoading(true);
+        await dispatch(fetchAllUserInfo());
+        setIsLoading(false);
+      } catch (err) {
+        console.log("ER", err);
+        setIsLoading(false);
+      }
+    };
+    loadedUser();
+  }, [dispatch]);
 
   return (
     <div className={classes.root}>

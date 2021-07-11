@@ -6,12 +6,15 @@ import {
   FETCH_USER_DETAILS,
   SIGNOUT,
   UPDATEPROFILE,
+  FETCH_ALL_USERS,
+  DELETE_USER,
 } from "../actions/types";
 
 const initialState = {
   token: null,
   user: {},
   userData: {},
+  users: [],
 };
 
 const authReducer = (state = initialState, action) => {
@@ -47,6 +50,15 @@ const authReducer = (state = initialState, action) => {
         ...state,
       };
     case SIGNOUT:
+      return {
+        ...state,
+      };
+    case FETCH_ALL_USERS:
+      return {
+        ...state,
+        users: action.payload,
+      };
+    case DELETE_USER:
       return {
         ...state,
       };

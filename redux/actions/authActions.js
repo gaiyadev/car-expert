@@ -7,6 +7,8 @@ import {
   CHANGEPASSWORD,
   UPDATEPROFILE,
   SIGNOUT,
+  FETCH_ALL_USERS,
+  DELETE_USER,
 } from "../actions/types";
 const baseUrl = "http://localhost:5000/api/v1/users";
 // const token = localStorage.getItem("jwt");
@@ -189,6 +191,56 @@ export const signOut = () => async (dispatch) => {
     }
   } catch (error) {
     throw new Error(error);
+  } finally {
+  }
+};
+
+// Fetch all users
+export const fetchAllUserInfo = () => async (dispatch) => {
+  const token = localStorage.getItem("jwt");
+  try {
+    const response = await axios.get(`${baseUrl}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const users = response.data.user.data;
+      dispatch({
+        type: FETCH_ALL_USERS,
+        payload: users,
+      });
+    }
+  } catch (err) {
+    const error = err.response;
+    throw new Error(error.data.error);
+  } finally {
+  }
+};
+
+// Delete user
+export const deleteUser = (id) => async (dispatch) => {
+  const token = localStorage.getItem("jwt");
+  try {
+    const response = await axios.delete(`${baseUrl}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const user = response.data.message;
+      console.log(response);
+      dispatch({
+        type: DELETE_USER,
+        payload: user,
+      });
+    }
+  } catch (err) {
+    const error = err.response;
+    console.log(err.response)
+    throw new Error(err);
   } finally {
   }
 };

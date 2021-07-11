@@ -1,5 +1,6 @@
 export const SIGNIN = "SIGNIN";
 export const SIGNUP = "SIGNUP";
+export const DELETE_USER = "DELETE_USER";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const UPDATEPROFILE = "UPDATEPROFILE";
 export const SIGNOUT = "SIGNOUT";

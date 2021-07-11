@@ -1,53 +1,41 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchAllUserInfo,
+  deleteUser,
+} from "../../../redux/actions/authActions";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import { Notify } from "notiflix";
 import MaterialTable from "material-table";
 import Head from "next/head";
 
 const Users = () => {
-  const [data, setData] = useState([
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-  ]);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+  const user = useSelector((state) => state.auth.users);
+
+  const [data, setData] = useState(user);
   const [columns, setColumns] = useState([
-    { title: "UserName", field: "username" },
-    { title: "EMail", field: "email" },
-    { title: "RegOn", field: "birthYear", type: "numeric" },
+    { title: "Id", field: "id" },
+    { title: "Username", field: "username" },
+    { title: "Email", field: "email" },
+    { title: "Created_at", field: "created_at" },
   ]);
+
+  React.useEffect(() => {
+    const loadedUser = async () => {
+      try {
+        setIsLoading(true);
+        await dispatch(fetchAllUserInfo());
+        setIsLoading(false);
+      } catch (err) {
+        console.log("ER", err);
+        setIsLoading(false);
+      }
+    };
+    loadedUser();
+  }, [dispatch]);
 
   return (
     <>
@@ -79,45 +67,18 @@ const Users = () => {
               columns={columns}
               data={data}
               editable={{
-                onRowAdd: (newData) =>
-                  new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      setData([...data, newData]);
-
-                      resolve();
-                    }, 1000);
-                  }),
-                onRowUpdate: (newData, oldData) =>
-                  new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      const dataUpdate = [...data];
-                      const index = oldData.tableData.id;
-                      dataUpdate[index] = newData;
-                      setData([...dataUpdate]);
-
-                      resolve();
-                    }, 1000);
-                  }),
                 onRowDelete: (oldData) =>
                   new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                      const dataDelete = [...data];
-                      const index = oldData.tableData.id;
-                      dataDelete.splice(index, 1);
-                      setData([...dataDelete]);
-
+                    try {
+                      dispatch(deleteUser(oldData.id));
+                      dispatch(fetchAllUserInfo());
                       resolve();
-                    }, 1000);
+                      Notify.success("Account deleted successfully");
+                    } catch (error) {
+                      reject(error);
+                    }
                   }),
               }}
-              //   actions={[
-              //     {
-              //       icon: "save",
-              //       tooltip: "Save User",
-              //       onClick: (event, rowData) =>
-              //         alert("You saved " + rowData.name),
-              //     },
-              //   ]}
               title="All Users"
             />
           </Box>
