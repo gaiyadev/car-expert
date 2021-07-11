@@ -8,7 +8,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  symptoms: [],
+  symptoms: null,
   symptom: {},
 };
 
@@ -19,13 +19,18 @@ const carReducer = (state = initialState, action) => {
         ...state,
       };
     case FETCH_ALL_SYMPTOMS:
-      return {};
+      return {
+        ...state,
+        symptoms: action.payload,
+      };
     case FETCH_SYMPTOM:
       return {};
     case EDIT_SYMPTOMS:
       return {};
     case DELETE_SYMPTOMS:
-      return {};
+      return {
+        ...state,
+      };
     case UPDATE_SYMPTOMS:
       return {};
     default:

@@ -198,32 +198,6 @@ const Symptoms = () => {
                     }}
                   />
 
-                  {/* causes */}
-                  <Textarea
-                    label="Causes"
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton edge="end">
-                            {
-                              <PermDeviceInformation
-                                color={
-                                  props.errors.causes ? "error" : "primary"
-                                }
-                              />
-                            }
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    name="causes"
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    value={props.values.causes}
-                    error={props.errors.causes ? true : false}
-                    errortext={props.errors.causes}
-                  />
-
                   {/* symtoms */}
                   <Textarea
                     label="symptoms"
@@ -248,6 +222,32 @@ const Symptoms = () => {
                     value={props.values.symptoms}
                     error={props.errors.symptoms ? true : false}
                     errortext={props.errors.symptoms}
+                  />
+                  
+                  {/* causes */}
+                  <Textarea
+                    label="Causes"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {
+                              <PermDeviceInformation
+                                color={
+                                  props.errors.causes ? "error" : "primary"
+                                }
+                              />
+                            }
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    name="causes"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.causes}
+                    error={props.errors.causes ? true : false}
+                    errortext={props.errors.causes}
                   />
 
                   {/*solutions  */}
