@@ -3,6 +3,7 @@ import Head from "next/head";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
+import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import Input from "../../../components/default/form/input";
 import Textarea from "../../../components/default/form/textarea";
@@ -13,9 +14,12 @@ import Card from "@material-ui/core/Card";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { Person, PermDeviceInformation, Label } from "@material-ui/icons";
 import IconButton from "@material-ui/core/IconButton";
-
+import { addSymptom } from "../../../redux/actions/carAction";
+import ProgressLoader from "../../../components/default/progress/loading";
+import ErrorAlert from "../../../components/default/form/errorAlert";
+import SuccessAlert from "../../../components/default/form/successAlert";
 // regex
-const usernameRegex = /^[A-Za-z '']+$/;
+const usernameRegex = /^[A-Za-z '' 0-9]+$/;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,7 +38,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Symptoms = () => {
   const classes = useStyles();
-
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [message, setMessage] = React.useState("");
   const [values, setValues] = React.useState({
     showComfirmPassword: false,
     showPassword: false,
@@ -56,24 +63,25 @@ const Symptoms = () => {
                 Add Symptoms
               </Typography>
             </Box>
+            <Box py={3}>
+              {error ? (
+                <ErrorAlert title={error} />
+              ) : message ? (
+                <SuccessAlert title={message} />
+              ) : (
+                ""
+              )}
+            </Box>
             <Formik
               initialValues={{
-                title: "",
                 causes: "",
                 solutions: "",
                 carType: "",
                 yearOfManufacture: "",
                 type: "",
+                symptoms: "",
               }}
               validationSchema={Yup.object({
-                title: Yup.string()
-                  .min(3, "Title must be atleast 3 characters")
-                  .max(120, "Title is too Long!")
-                  .matches(
-                    usernameRegex,
-                    "Only alphabets are allowed for this field "
-                  )
-                  .required("Title is required"),
                 causes: Yup.string()
                   .matches(usernameRegex, "Causes is invalid ")
                   .required("Causes is required"),
@@ -89,37 +97,26 @@ const Symptoms = () => {
                 type: Yup.string()
                   .matches(usernameRegex, "Car name is invalid ")
                   .required("Car name is required"),
+                symptoms: Yup.string()
+                  .matches(usernameRegex, "Car name is invalid ")
+                  .required("Car name is required"),
               })}
-              onSubmit={(values, actions) => {
-                console.log(values);
+              onSubmit={async (values, actions) => {
+                try {
+                  setIsLoading(true);
+                  setError("");
+                  await dispatch(addSymptom(values));
+                  setIsLoading(false);
+                  setMessage("Added successfully");
+                } catch (err) {
+                  setMessage("");
+                  setError(err.message);
+                  setIsLoading(false);
+                }
               }}
             >
               {(props) => (
                 <form onSubmit={props.handleSubmit}>
-                  <Input
-                    type="text"
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    value={props.values.username}
-                    label="Title"
-                    name="title"
-                    error={props.errors.title ? true : false}
-                    errortext={props.errors.title}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="start">
-                          <IconButton edge="end">
-                            {
-                              <Person
-                                color={props.errors.title ? "error" : "primary"}
-                              />
-                            }
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-
                   {/* Car type */}
                   <Input
                     type="text"
@@ -227,6 +224,32 @@ const Symptoms = () => {
                     errortext={props.errors.causes}
                   />
 
+                  {/* symtoms */}
+                  <Textarea
+                    label="symptoms"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {
+                              <PermDeviceInformation
+                                color={
+                                  props.errors.causes ? "error" : "primary"
+                                }
+                              />
+                            }
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    name="symptoms"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.symptoms}
+                    error={props.errors.symptoms ? true : false}
+                    errortext={props.errors.symptoms}
+                  />
+
                   {/*solutions  */}
                   <Textarea
                     label="Solutions"
@@ -253,7 +276,10 @@ const Symptoms = () => {
                     errortext={props.errors.solutions}
                   />
 
-                  <Button label="Submit" type="submit" />
+                  <Button
+                    label={isLoading ? <ProgressLoader /> : "Submit"}
+                    type="submit"
+                  />
                 </form>
               )}
             </Formik>

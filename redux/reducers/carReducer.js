@@ -15,7 +15,9 @@ const initialState = {
 const carReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_SYMPTOMS:
-      return {};
+      return {
+        ...state,
+      };
     case FETCH_ALL_SYMPTOMS:
       return {};
     case FETCH_SYMPTOM:

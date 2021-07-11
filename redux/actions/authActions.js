@@ -9,15 +9,9 @@ import {
   SIGNOUT,
   FETCH_ALL_USERS,
   DELETE_USER,
+  AUTH,
 } from "../actions/types";
 const baseUrl = "http://localhost:5000/api/v1/users";
-// const token = localStorage.getItem("jwt");
-
-// headers
-const headers = {
-  "Content-Type": "application/json",
-  Authorization: "",
-};
 
 // SIGN UP
 export const signUp = ({ username, email, password }) => async (dispatch) => {
@@ -29,7 +23,6 @@ export const signUp = ({ username, email, password }) => async (dispatch) => {
     });
 
     if (response.status === 201) {
-      console.log(response.data.message);
       dispatch({
         type: SIGNUP,
         payload: response.data.message,
@@ -51,7 +44,6 @@ export const signIn = ({ email, password }) => async (dispatch) => {
     });
 
     if (response.status === 200) {
-      console.log(response.data.token);
       dispatch({
         type: SIGNIN,
         payload: response.data,
@@ -231,7 +223,6 @@ export const deleteUser = (id) => async (dispatch) => {
 
     if (response.status === 200) {
       const user = response.data.message;
-      console.log(response);
       dispatch({
         type: DELETE_USER,
         payload: user,
@@ -239,8 +230,21 @@ export const deleteUser = (id) => async (dispatch) => {
     }
   } catch (err) {
     const error = err.response;
-    console.log(err.response)
-    throw new Error(err);
+    throw new Error(error);
+  } finally {
+  }
+};
+
+export const auth = () => async (dispatch) => {
+  try {
+    const storage = localStorage.getItem("jwt");
+    if (storage) {
+      dispatch({
+        type: AUTH,
+      });
+    }
+  } catch (error) {
+    throw new Error(error);
   } finally {
   }
 };

@@ -4,6 +4,7 @@ export const DELETE_USER = "DELETE_USER";
 export const CHANGEPASSWORD = "CHANGEPASSWORD";
 export const UPDATEPROFILE = "UPDATEPROFILE";
 export const SIGNOUT = "SIGNOUT";
+export const AUTH = "AUTH";
 export const FETCH_ALL_USERS = "FETCH_ALL_USERS";
 export const FETCH_USER = "FETCH_USER";
 export const FETCH_USER_DETAILS = "FETCH_USER_DETAILS";

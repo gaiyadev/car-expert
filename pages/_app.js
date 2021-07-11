@@ -1,6 +1,4 @@
 import { Provider } from "react-redux";
-import { useRouter } from "next/router";
-
 import "../styles/globals.css";
 import Default from "../layouts/default/default";
 import Dashboard from "../layouts/dashboard/dashboard";
@@ -15,7 +13,7 @@ const layouts = {
 
 function MyApp({ Component, pageProps }) {
   const Layout = layouts[Component.layout] || ((children) => <>{children}</>);
-  const router = useRouter();
+
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>

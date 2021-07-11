@@ -29,7 +29,6 @@ import {
 } from "../../components/dashboard/listItems";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { Notify } from "notiflix";
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">

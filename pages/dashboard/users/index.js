@@ -9,9 +9,12 @@ import Box from "@material-ui/core/Box";
 import { Notify } from "notiflix";
 import MaterialTable from "material-table";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 const Users = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const user = useSelector((state) => state.auth.users);
 
@@ -71,9 +74,9 @@ const Users = () => {
                   new Promise((resolve, reject) => {
                     try {
                       dispatch(deleteUser(oldData.id));
-                      dispatch(fetchAllUserInfo());
                       resolve();
                       Notify.success("Account deleted successfully");
+                      router.push("/dashboard");
                     } catch (error) {
                       reject(error);
                     }
