@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   symptoms: null,
-  symptom: {},
+  symptom: null,
 };
 
 const carReducer = (state = initialState, action) => {
@@ -24,7 +24,10 @@ const carReducer = (state = initialState, action) => {
         symptoms: action.payload,
       };
     case FETCH_SYMPTOM:
-      return {};
+      return {
+        ...state,
+        symptom: action.payload,
+      };
     case EDIT_SYMPTOMS:
       return {};
     case DELETE_SYMPTOMS:

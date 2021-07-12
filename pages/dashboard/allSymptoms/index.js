@@ -77,8 +77,8 @@ const FetchSymptoms = () => {
                 columns={columns}
                 data={data}
                 editable={{
-                  onRowUpdate: (newData, oldData) =>
-                    new Promise((resolve, reject) => {}),
+                  // onRowUpdate: (newData, oldData) =>
+                  //   new Promise((resolve, reject) => {}),
                   onRowDelete: (oldData) =>
                     new Promise((resolve, reject) => {
                       try {
@@ -86,13 +86,21 @@ const FetchSymptoms = () => {
                         dispatch(fetchSymptoms());
                         Notify.success("Deleted successfully");
                         resolve();
-                       // router.push('/dashboard')
+                        // router.push('/dashboard')
                       } catch (error) {
                         console.log(error);
                         reject(error);
                       }
                     }),
                 }}
+                actions={[
+                  {
+                    icon: "visibility",
+                    tooltip: "Edit",
+                    onClick: (event, rowData) =>
+                      router.push("/dashboard/editSymptom/" + rowData.id),
+                  },
+                ]}
                 title="All Symptoms"
               />
             )}

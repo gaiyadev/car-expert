@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { signInUser, signOut } from "../../redux/actions/authActions";
+import { signInUser, signOut, auth } from "../../redux/actions/authActions";
 import { useRouter } from "next/router";
 import Preloader from "../../components/default/progress/loading";
 import clsx from "clsx";
@@ -169,6 +169,17 @@ const Dashboard = ({ children }) => {
     loadedUser();
     setUsername(user);
   }, [dispatch, user]);
+
+  // useEffect(() => {
+  //   const check = async () => {
+  //     try {
+  //      await dispatch(auth());
+  //     } catch (error) {
+  //       console.log("Comm", error);
+  //     }
+  //   };
+  //   check();
+  // }, [dispatch]);
 
   return (
     <div className={classes.root}>

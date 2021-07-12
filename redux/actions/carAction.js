@@ -1,5 +1,11 @@
 import axios from "axios";
-import { ADD_SYMPTOMS, DELETE_SYMPTOMS, FETCH_ALL_SYMPTOMS } from "./types";
+import {
+  ADD_SYMPTOMS,
+  DELETE_SYMPTOMS,
+  FETCH_ALL_SYMPTOMS,
+  UPDATE_SYMPTOMS,
+  FETCH_SYMPTOM,
+} from "./types";
 const baseUrl = "http://localhost:5000/api/v1/cars";
 
 // add UP
@@ -61,7 +67,7 @@ export const fetchSymptoms = () => async (dispatch) => {
         type: FETCH_ALL_SYMPTOMS,
         payload: data,
       });
-    } 
+    }
   } catch (err) {
     const error = err.response;
     throw new Error(error.data.error);
@@ -90,6 +96,74 @@ export const deleteSymptoms = (id) => async (dispatch) => {
     const error = err.response;
     console.log(error);
     throw new Error(error);
+  } finally {
+  }
+};
+
+// Get single symptoms
+export const getSignleSymptoms = (id) => async (dispatch) => {
+  const token = localStorage.getItem("jwt");
+  try {
+    const response = await axios.get(`${baseUrl}/car/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      const user = response.data.car;
+      dispatch({
+        type: FETCH_SYMPTOM,
+        payload: user,
+      });
+    }
+  } catch (err) {
+    const error = err.response;
+    console.log(error);
+    throw new Error(error);
+  } finally {
+  }
+};
+
+// update symptoms
+export const updateSymptoms = ({
+  causes,
+  solutions,
+  carType,
+  type,
+  yearOfManufacture,
+  symptoms,
+}) => async (dispatch) => {
+  const token = localStorage.getItem("jwt");
+  try {
+    const response = await axios.put(
+      `${baseUrl}/car/id`,
+      {
+        causes,
+        solution: solutions,
+        carType,
+        type,
+        yearOfManufacture,
+        symptoms,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 201) {
+      const user = response.data.message;
+      dispatch({
+        type: UPDATE_SYMPTOMS,
+        payload: user,
+      });
+    }
+  } catch (err) {
+    const error = err.response;
+    console.log(error);
+    throw new Error(error.data);
   } finally {
   }
 };

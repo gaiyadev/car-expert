@@ -8,6 +8,7 @@ import {
   UPDATEPROFILE,
   FETCH_ALL_USERS,
   DELETE_USER,
+  AUTH,
 } from "../actions/types";
 
 const initialState = {
@@ -59,6 +60,10 @@ const authReducer = (state = initialState, action) => {
         users: action.payload,
       };
     case DELETE_USER:
+      return {
+        ...state,
+      };
+    case AUTH:
       return {
         ...state,
       };

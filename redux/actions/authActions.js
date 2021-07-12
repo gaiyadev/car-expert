@@ -244,6 +244,7 @@ export const auth = () => async (dispatch) => {
       });
     }
   } catch (error) {
+    console.log("redux", error);
     throw new Error(error);
   } finally {
   }
