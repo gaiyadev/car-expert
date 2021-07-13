@@ -1,9 +1,6 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchAllUserInfo,
-  deleteUser,
-} from "../../../redux/actions/authActions";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { deleteUser } from "../../../redux/actions/authActions";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import { Notify } from "notiflix";
@@ -25,9 +22,6 @@ const Users = ({ users }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  // const [isLoading, setIsLoading] = useState(false);
-  // const user = useSelector((state) => state.auth.users);
-
   const data = users.data;
   const columns = [
     { title: "Id", field: "id" },
@@ -35,20 +29,6 @@ const Users = ({ users }) => {
     { title: "Email", field: "email" },
     { title: "Created_at", field: "created_at" },
   ];
-
-  // React.useEffect(() => {
-  //   const loadedUser = async () => {
-  //     try {
-  //       setIsLoading(true);
-  //       await dispatch(fetchAllUserInfo());
-  //       setIsLoading(false);
-  //     } catch (err) {
-  //       console.log("ER", err);
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   loadedUser();
-  // }, [dispatch]);
 
   return (
     <>

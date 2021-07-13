@@ -43,14 +43,14 @@ const Home = () => {
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={3} sm={12}>
-          <ScoreCard title="Symtoms" stats="5" icon={<BugReportIcon />} />
+          <ScoreCard title="Faults" stats="5" icon={<BugReportIcon />} />
         </Grid>
         <Grid item xs={12} md={3} sm={12}>
           <ScoreCard title="Users" stats="85" icon={<PeopleIcon />} />
         </Grid>
         <Grid item xs={12} md={3} sm={12}>
           <ScoreCard
-            title="Type"
+            title="Car Type"
             stats="1"
             icon={
               <MergeTypeIcon

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Notify } from "notiflix";
 import Head from "next/head";
 import Box from "@material-ui/core/Box";
@@ -89,7 +89,7 @@ const Home = ({ cars }) => {
                   ]}
                   columns={columns}
                   data={loadedData}
-                  title="Search car Issues"
+                  title="Search car faults"
                 />
               </Paper>
             </Box>

@@ -1,9 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import {
-  fetchSymptoms,
-  deleteSymptoms,
-} from "../../../redux/actions/carAction";
+import { deleteSymptoms } from "../../../redux/actions/carAction";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import MaterialTable from "material-table";
@@ -44,7 +41,7 @@ const FetchSymptoms = ({ cars }) => {
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-        <title>All symptoms</title>
+        <title>All Faults</title>
       </Head>
       <Grid container>
         <Grid item sm={12} md={12} xs={12}>
@@ -52,7 +49,7 @@ const FetchSymptoms = ({ cars }) => {
             <MaterialTable
               options={{
                 actionsColumnIndex: -1,
-                // filtering: true,
+                filtering: true,
                 search: true,
                 sorting: true,
                 headerStyle: {
@@ -72,7 +69,6 @@ const FetchSymptoms = ({ cars }) => {
                       Notify.success("Deleted successfully");
                       router.push("/dashboard/allSymptoms");
                       resolve();
-                      router.reload();
                     } catch (error) {
                       console.log(error);
                       reject(error);
@@ -87,7 +83,7 @@ const FetchSymptoms = ({ cars }) => {
                     router.push("/dashboard/editSymptom/" + rowData.id),
                 },
               ]}
-              title="All Symptoms"
+              title="All Faults"
             />
           </Box>
         </Grid>
