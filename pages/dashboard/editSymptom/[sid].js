@@ -5,8 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
-import axios from "axios";
-
 import Input from "../../../components/default/form/input";
 import Textarea from "../../../components/default/form/textarea";
 import Button from "../../../components/default/form/button";
@@ -15,9 +13,8 @@ import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { Person, PermDeviceInformation, Label } from "@material-ui/icons";
-import { getSignleSymptoms } from "../../../redux/actions/carAction";
+import { editSymptom } from "../../../redux/actions/carAction";
 import IconButton from "@material-ui/core/IconButton";
-import { addSymptom } from "../../../redux/actions/carAction";
 import ProgressLoader from "../../../components/default/progress/loading";
 import ErrorAlert from "../../../components/default/form/errorAlert";
 import SuccessAlert from "../../../components/default/form/successAlert";
@@ -26,7 +23,6 @@ const baseUrl = "http://localhost:5000/api/v1/cars";
 
 // regex
 const usernameRegex = /^[A-Za-z '' 0-9]+$/;
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -42,44 +38,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Symptoms = () => {
+export const getStaticPaths = async () => {
+  const res = await fetch(`${baseUrl}/car`);
+  const data = await res.json();
+  const carsList = data.cars.data;
+  const paths = carsList.map((sid) => {
+    return {
+      params: { sid: sid.id.toString() },
+    };
+  });
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps = async (context) => {
+  const id = context.params.sid;
+  const res = await fetch(`${baseUrl}/car/${id}`);
+  const data = await res.json();
+  const carsList = data.car;
+  return {
+    props: { car: carsList },
+  };
+};
+
+const Symptoms = ({ car }) => {
+  const {
+    causes,
+    carType,
+    solution,
+    id,
+    yearOfManufacture,
+    type,
+    symptoms,
+  } = car;
   const classes = useStyles();
   const router = useRouter();
   const dispatch = useDispatch();
-  const { sid } = router.query;
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState("");
   const [message, setMessage] = React.useState("");
-  const [data, setData] = React.useState(null);
-
-  const getSignleSymptoms = async (id) => {
-    setIsLoading(true);
-    const token = localStorage.getItem("jwt");
-    try {
-      const response = await axios.get(`${baseUrl}/car/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.status === 200 && response.statusText === "OK") {
-        setIsLoading(false);
-        const user = response.data.car;
-        await setData(user);
-        console.log("user>>>>>>>>", user);
-        console.log("data>>>>>>>>", data);
-      }
-    } catch (err) {
-      setIsLoading(false);
-      const error = err.response;
-      console.log(error);
-    }
-  };
-
-  React.useEffect(() => {
-    getSignleSymptoms(sid);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sid]);
 
   return (
     <div className={classes.root}>
@@ -94,7 +93,7 @@ const Symptoms = () => {
           <Card className={classes.card}>
             <Box py={3}>
               <Typography variant="h4" color="primary" align="left">
-                Edit Symptoms {sid}
+                Edit Car Fault
               </Typography>
             </Box>
             <Box py={3}>
@@ -106,223 +105,219 @@ const Symptoms = () => {
                 ""
               )}
             </Box>
-            {isLoading ? (
-              <ProgressLoader />
-            ) : (
-              <Formik
-                initialValues={{
-                  causes: "data",
-                  solutions: "",
-                  carType: "",
-                  yearOfManufacture: "",
-                  type: "",
-                  symptoms: "",
-                }}
-                validationSchema={Yup.object({
-                  causes: Yup.string()
-                    .matches(usernameRegex, "Causes is invalid ")
-                    .required("Causes is required"),
-                  solutions: Yup.string()
-                    .matches(usernameRegex, "solutions is invalid ")
-                    .required("Solutions is required"),
-                  carType: Yup.string()
-                    .matches(usernameRegex, "car type is invalid ")
-                    .required("Car type is required"),
-                  yearOfManufacture: Yup.string()
-                    .matches(usernameRegex, "Year of Manufacture is invalid ")
-                    .required("Year of Manufacture is required"),
-                  type: Yup.string()
-                    .matches(usernameRegex, "Car name is invalid ")
-                    .required("Car name is required"),
-                  symptoms: Yup.string()
-                    .matches(usernameRegex, "Car name is invalid ")
-                    .required("Car name is required"),
-                })}
-                onSubmit={async (values, actions) => {
-                  try {
-                    setIsLoading(true);
-                    setError("");
-                    await dispatch(addSymptom(values));
-                    setIsLoading(false);
-                    setMessage("Added successfully");
-                  } catch (err) {
-                    setMessage("");
-                    setError(err.message);
-                    setIsLoading(false);
-                  }
-                }}
-              >
-                {(props) => (
-                  <form onSubmit={props.handleSubmit}>
-                    {/* Car type */}
-                    <Input
-                      type="text"
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      value={props.values.carType}
-                      label="Car  Type"
-                      name="carType"
-                      error={props.errors.carType ? true : false}
-                      errortext={props.errors.carType}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="start">
-                            <IconButton edge="end">
-                              {
-                                <Person
-                                  color={
-                                    props.errors.carType ? "error" : "primary"
-                                  }
-                                />
-                              }
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
 
-                    {/* Car name */}
-                    <Input
-                      type="text"
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      value={props.values.type}
-                      label="Car  Name"
-                      name="type"
-                      error={props.errors.type ? true : false}
-                      errortext={props.errors.type}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="start">
-                            <IconButton edge="end">
-                              {
-                                <Person
-                                  color={
-                                    props.errors.type ? "error" : "primary"
-                                  }
-                                />
-                              }
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
+            <Formik
+              initialValues={{
+                causes: causes,
+                solutions: solution,
+                carType: carType,
+                yearOfManufacture: yearOfManufacture,
+                type: type,
+                symptoms: symptoms,
+              }}
+              validationSchema={Yup.object({
+                causes: Yup.string()
+                  .matches(usernameRegex, "Causes is invalid ")
+                  .required("Causes is required"),
+                solutions: Yup.string()
+                  .matches(usernameRegex, "solutions is invalid ")
+                  .required("Solutions is required"),
+                carType: Yup.string()
+                  .matches(usernameRegex, "car type is invalid ")
+                  .required("Car type is required"),
+                yearOfManufacture: Yup.string()
+                  .matches(usernameRegex, "Year of Manufacture is invalid ")
+                  .required("Year of Manufacture is required"),
+                type: Yup.string()
+                  .matches(usernameRegex, "Car type is invalid ")
+                  .required("Car type is required"),
+                symptoms: Yup.string()
+                  .matches(usernameRegex, "Car Fault is invalid ")
+                  .required("Car Fault is required"),
+              })}
+              onSubmit={async (values) => {
+                try {
+                  setIsLoading(true);
+                  setError("");
+                  await dispatch(editSymptom(values, id));
+                  setIsLoading(false);
+                  setMessage("Updated successfully");
+                  router.push("/dashboard/allSymptoms");
+                } catch (err) {
+                  setMessage("");
+                  setError(err.message);
+                  setIsLoading(false);
+                }
+              }}
+            >
+              {(props) => (
+                <form onSubmit={props.handleSubmit}>
+                  {/* Car type */}
+                  <Input
+                    type="text"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.carType}
+                    label="Car  Type"
+                    name="carType"
+                    error={props.errors.carType ? true : false}
+                    errortext={props.errors.carType}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {
+                              <Person
+                                color={
+                                  props.errors.carType ? "error" : "primary"
+                                }
+                              />
+                            }
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
 
-                    {/* Year of Manufacture */}
-                    <Input
-                      type="text"
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      value={props.values.yearOfManufacture}
-                      label="year of manufacture"
-                      name="yearOfManufacture"
-                      error={props.errors.yearOfManufacture ? true : false}
-                      errortext={props.errors.yearOfManufacture}
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="start">
-                            <IconButton edge="end">
-                              {
-                                <Person
-                                  color={
-                                    props.errors.yearOfManufacture
-                                      ? "error"
-                                      : "primary"
-                                  }
-                                />
-                              }
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
+                  {/* Car name */}
+                  <Input
+                    type="text"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.type}
+                    label="Car  Name"
+                    name="type"
+                    error={props.errors.type ? true : false}
+                    errortext={props.errors.type}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {
+                              <Person
+                                color={props.errors.type ? "error" : "primary"}
+                              />
+                            }
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
 
-                    {/* symtoms */}
-                    <Textarea
-                      label="symptoms"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="start">
-                            <IconButton edge="end">
-                              {
-                                <PermDeviceInformation
-                                  color={
-                                    props.errors.causes ? "error" : "primary"
-                                  }
-                                />
-                              }
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      name="symptoms"
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      value={props.values.symptoms}
-                      error={props.errors.symptoms ? true : false}
-                      errortext={props.errors.symptoms}
-                    />
+                  {/* Year of Manufacture */}
+                  <Input
+                    type="text"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.yearOfManufacture}
+                    label="year of manufacture"
+                    name="yearOfManufacture"
+                    error={props.errors.yearOfManufacture ? true : false}
+                    errortext={props.errors.yearOfManufacture}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {
+                              <Person
+                                color={
+                                  props.errors.yearOfManufacture
+                                    ? "error"
+                                    : "primary"
+                                }
+                              />
+                            }
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
 
-                    {/* causes */}
-                    <Textarea
-                      label="Causes"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="start">
-                            <IconButton edge="end">
-                              {
-                                <PermDeviceInformation
-                                  color={
-                                    props.errors.causes ? "error" : "primary"
-                                  }
-                                />
-                              }
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      name="causes"
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      value={props.values.causes}
-                      error={props.errors.causes ? true : false}
-                      errortext={props.errors.causes}
-                    />
+                  {/* symtoms */}
+                  <Textarea
+                    label="Fault"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {
+                              <PermDeviceInformation
+                                color={
+                                  props.errors.causes ? "error" : "primary"
+                                }
+                              />
+                            }
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    name="symptoms"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.symptoms}
+                    error={props.errors.symptoms ? true : false}
+                    errortext={props.errors.symptoms}
+                  />
 
-                    {/*solutions  */}
-                    <Textarea
-                      label="Solutions"
-                      InputProps={{
-                        endAdornment: (
-                          <InputAdornment position="start">
-                            <IconButton edge="end">
-                              {
-                                <Label
-                                  color={
-                                    props.errors.solutions ? "error" : "primary"
-                                  }
-                                />
-                              }
-                            </IconButton>
-                          </InputAdornment>
-                        ),
-                      }}
-                      name="solutions"
-                      onChange={props.handleChange}
-                      onBlur={props.handleBlur}
-                      value={props.values.solutions}
-                      error={props.errors.solutions ? true : false}
-                      errortext={props.errors.solutions}
-                    />
+                  {/* causes */}
+                  <Textarea
+                    label="Causes"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {
+                              <PermDeviceInformation
+                                color={
+                                  props.errors.causes ? "error" : "primary"
+                                }
+                              />
+                            }
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    name="causes"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.causes}
+                    error={props.errors.causes ? true : false}
+                    errortext={props.errors.causes}
+                  />
 
-                    <Button
-                      label={isLoading ? <ProgressLoader /> : "Submit"}
-                      type="submit"
-                    />
-                  </form>
-                )}
-              </Formik>
-            )}
+                  {/*solutions  */}
+                  <Textarea
+                    label="Solutions"
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="start">
+                          <IconButton edge="end">
+                            {
+                              <Label
+                                color={
+                                  props.errors.solutions ? "error" : "primary"
+                                }
+                              />
+                            }
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    name="solutions"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.solutions}
+                    error={props.errors.solutions ? true : false}
+                    errortext={props.errors.solutions}
+                  />
+
+                  <Button
+                    label={isLoading ? <ProgressLoader /> : "Submit"}
+                    type="submit"
+                  />
+                </form>
+              )}
+            </Formik>
           </Card>
         </Grid>
         <Grid item xs={12} md={3} sm={12}></Grid>

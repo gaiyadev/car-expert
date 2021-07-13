@@ -10,35 +10,45 @@ import { Notify } from "notiflix";
 import MaterialTable from "material-table";
 import Head from "next/head";
 import { useRouter } from "next/router";
+const baseUrl = "http://localhost:5000/api/v1/users";
 
-const Users = () => {
+export const getStaticProps = async () => {
+  const res = await fetch(`${baseUrl}/`);
+  const data = await res.json();
+  const carsList = data.users;
+  return {
+    props: { users: carsList },
+  };
+};
+
+const Users = ({ users }) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const user = useSelector((state) => state.auth.users);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const user = useSelector((state) => state.auth.users);
 
-  const [data, setData] = useState(user);
-  const [columns, setColumns] = useState([
+  const data = users.data;
+  const columns = [
     { title: "Id", field: "id" },
     { title: "Username", field: "username" },
     { title: "Email", field: "email" },
     { title: "Created_at", field: "created_at" },
-  ]);
+  ];
 
-  React.useEffect(() => {
-    const loadedUser = async () => {
-      try {
-        setIsLoading(true);
-        await dispatch(fetchAllUserInfo());
-        setIsLoading(false);
-      } catch (err) {
-        console.log("ER", err);
-        setIsLoading(false);
-      }
-    };
-    loadedUser();
-  }, [dispatch]);
+  // React.useEffect(() => {
+  //   const loadedUser = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       await dispatch(fetchAllUserInfo());
+  //       setIsLoading(false);
+  //     } catch (err) {
+  //       console.log("ER", err);
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   loadedUser();
+  // }, [dispatch]);
 
   return (
     <>
@@ -76,7 +86,7 @@ const Users = () => {
                       dispatch(deleteUser(oldData.id));
                       resolve();
                       Notify.success("Account deleted successfully");
-                      router.push("/dashboard");
+                      router.push("/dashboard/users");
                     } catch (error) {
                       reject(error);
                     }

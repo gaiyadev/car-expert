@@ -50,15 +50,33 @@ const Fault = ({ car }) => {
                 padding: "30px 34px",
               }}
             >
-              <Typography variant="h5">Car Fault:</Typography>
+              <Typography
+                color="primary"
+                variant="h3"
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                Car Faults Details
+              </Typography>
+              <br />
+              <Typography color="primary" variant="h6">
+                Car Fault:
+              </Typography>
               <p>{car.symptoms}</p>
               {/*  */}
               <br />
-              <Typography variant="h6">Causes:</Typography>
+              <Typography color="primary" variant="h6">
+                Causes:
+              </Typography>
               <p>{car.causes}</p>
-              <Typography variant="h6">Solutions:</Typography>
+              <Typography color="primary" variant="h6">
+                Solutions:
+              </Typography>
               <p>{car.solution}</p>
-              <Typography variant="h6">Car Type:</Typography>
+              <Typography color="primary" variant="h6">
+                Car Type:
+              </Typography>
               <p>{car.carType}</p>
             </Paper>
           </Box>

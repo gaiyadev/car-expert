@@ -167,3 +167,42 @@ export const updateSymptoms = ({
   } finally {
   }
 };
+
+// Update ccar fault
+export const editSymptom = (
+  { causes, solutions, carType, type, yearOfManufacture, symptoms },
+  id
+) => async (dispatch) => {
+  const token = localStorage.getItem("jwt");
+  try {
+    const response = await axios.put(
+      `${baseUrl}/car/${id}`,
+      {
+        causes,
+        solution: solutions,
+        carType,
+        type,
+        yearOfManufacture,
+        symptoms,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 201) {
+      console.log(response);
+      dispatch({
+        type: UPDATE_SYMPTOMS,
+        payload: response.data.message,
+      });
+    }
+  } catch (err) {
+    console.log(err.response);
+    const error = err.response.data.symptoms[0];
+    throw new Error(error);
+  } finally {
+  }
+};

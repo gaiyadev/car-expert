@@ -35,7 +35,9 @@ const carReducer = (state = initialState, action) => {
         ...state,
       };
     case UPDATE_SYMPTOMS:
-      return {};
+      return {
+        ...state
+      };
     default:
       return state;
   }

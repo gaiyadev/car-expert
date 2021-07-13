@@ -53,7 +53,7 @@ export const mainListItems = (
       </ListItemIcon>
       <Link href="/dashboard/allSymptoms">
         <a>
-          <ListItemText primary="View Symptoms" />
+          <ListItemText primary="View Faults" />
         </a>
       </Link>
     </ListItem>

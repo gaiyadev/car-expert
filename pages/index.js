@@ -23,7 +23,7 @@ const Home = ({ cars }) => {
   const loadedData = cars.data;
   const router = useRouter();
   const columns = [
-    { title: "Symtoms", field: "symptoms" },
+    { title: "Fault", field: "symptoms" },
     { title: "Solution", field: "solution" },
     { title: "Causes", field: "causes" },
     { title: "CarType", field: "carType" },
