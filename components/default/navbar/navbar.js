@@ -135,8 +135,8 @@ const Navbar = () => {
               </Link>
             </Button>
           </Hidden>
-          <Brightness4Icon />
-          <WbSunnyIcon />
+          {/* <Brightness4Icon />
+          <WbSunnyIcon /> */}
         </Toolbar>
       </AppBar>
     </div>
