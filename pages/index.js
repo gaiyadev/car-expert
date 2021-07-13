@@ -65,7 +65,7 @@ const Home = ({ cars }) => {
           <Grid item sm={12} md={1} xs={12}></Grid>
           <Grid item sm={12} md={10} xs={12}>
             <Box style={{ maxWidth: "100%" }}>
-              <Paper elevation={7} py={5} px={5}>
+              <Paper elevation={2} py={5} px={5}>
                 <MaterialTable
                   options={{
                     actionsColumnIndex: -1,

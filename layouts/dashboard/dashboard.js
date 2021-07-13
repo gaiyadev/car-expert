@@ -28,13 +28,13 @@ import {
   secondaryListItems,
 } from "../../components/dashboard/listItems";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import { Notify } from "notiflix";
+import * as Notiflix from "notiflix";
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="#">
-        Your Website
+        Car Expert Website
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -156,30 +156,31 @@ const Dashboard = ({ children }) => {
   const user = useSelector((state) => state.auth.user);
 
   useEffect(() => {
-    const loadedUser = async () => {
-      try {
-        setIsLoading(true);
-        await dispatch(signInUser());
-        setIsLoading(false);
-      } catch (err) {
-        console.log("ER", err.message);
-        setIsLoading(false);
+    if (process.browser) {
+      if (!localStorage.getItem("jwt")) {
+        Notiflix.Report.failure(
+          "Unauthorized Access",
+          "You don't have access to this resources"
+        );
+        return router.push("/signin");
+      } else {
+        const loadedUser = async () => {
+          try {
+            setIsLoading(true);
+            await dispatch(signInUser());
+            setIsLoading(false);
+          } catch (err) {
+            console.log("ER", err.message);
+            setIsLoading(false);
+          }
+        };
+        loadedUser();
+        setUsername(user);
       }
-    };
-    loadedUser();
-    setUsername(user);
-  }, [dispatch, user]);
+    }
 
-  // useEffect(() => {
-  //   const check = async () => {
-  //     try {
-  //      await dispatch(auth());
-  //     } catch (error) {
-  //       console.log("Comm", error);
-  //     }
-  //   };
-  //   check();
-  // }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, user]);
 
   return (
     <div className={classes.root}>

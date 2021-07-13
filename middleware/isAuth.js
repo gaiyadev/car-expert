@@ -4,6 +4,5 @@ export const auth = () => {
   } catch (error) {
     console.log(error);
     throw new Error(error);
-  } finally {
   }
 };

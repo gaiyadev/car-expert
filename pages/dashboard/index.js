@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchAllUserInfo } from "../../redux/actions/authActions";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
@@ -8,9 +8,9 @@ import PeopleIcon from "@material-ui/icons/People";
 import BugReportIcon from "@material-ui/icons/BugReport";
 import MergeTypeIcon from "@material-ui/icons/MergeType";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import { useRouter } from "next/router";
 const baseUrl = "http://localhost:5000/api/v1/cars";
 const baseUrl2 = "http://localhost:5000/api/v1/users";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -39,19 +39,19 @@ const Home = ({ cars, users }) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    const loadedUser = async () => {
-      try {
-        setIsLoading(true);
-        await dispatch(fetchAllUserInfo());
-        setIsLoading(false);
-      } catch (err) {
-        console.log("ER", err);
-        setIsLoading(false);
-      }
-    };
-    loadedUser();
-  }, [dispatch]);
+  // useEffect(() => {
+  //   const loadedUser = async () => {
+  //     try {
+  //       setIsLoading(true);
+  //       await dispatch(fetchAllUserInfo());
+  //       setIsLoading(false);
+  //     } catch (err) {
+  //       console.log("ER", err);
+  //       setIsLoading(false);
+  //     }
+  //   };
+  //   loadedUser();
+  // }, [dispatch]);
 
   return (
     <div className={classes.root}>
