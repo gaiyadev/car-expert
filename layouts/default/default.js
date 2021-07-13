@@ -6,12 +6,10 @@ import Container from "@material-ui/core/Container";
 const Default = ({ children }) => {
   return (
     <>
-      <Navbar />
       <main>
-        <Container>
-          {children}
-        </Container>
-          {/* <Footer /> */}
+        <Navbar />
+        <Container>{children}</Container>
+        {/* <Footer /> */}
       </main>
     </>
   );

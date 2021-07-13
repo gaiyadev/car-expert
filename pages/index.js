@@ -7,51 +7,29 @@ import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
 // import styles from "../styles/Home.module.css";
 import MaterialTable from "material-table";
+const baseUrl = "http://localhost:5000/api/v1/cars";
+import { useRouter } from "next/router";
 
-const Home = () => {
-  const [data, setData] = useState([
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-    {
-      username: "Mehmet",
-      email: "Baran",
-      birthYear: 1987,
-      birthCity: 63,
-    },
-  ]);
-  const [columns, setColumns] = useState([
-    { title: "UserName", field: "username" },
-    { title: "EMail", field: "email" },
-    { title: "RegOn", field: "birthYear", type: "numeric" },
-  ]);
+export const getStaticProps = async () => {
+  const res = await fetch(`${baseUrl}/car`);
+  const data = await res.json();
+  const carsList = data.cars;
+  return {
+    props: { cars: carsList },
+  };
+};
+
+const Home = ({ cars }) => {
+  const loadedData = cars.data;
+  const router = useRouter();
+  const columns = [
+    { title: "Symtoms", field: "symptoms" },
+    { title: "Solution", field: "solution" },
+    { title: "Causes", field: "causes" },
+    { title: "CarType", field: "carType" },
+    { title: "Type", field: "type" },
+    // { title: "year Of Manufacture", field: "yearOfManufacture" },
+  ];
   useEffect(() => {
     Notify.success("Welcome to Car Expert");
   }, []);
@@ -91,7 +69,7 @@ const Home = () => {
                 <MaterialTable
                   options={{
                     actionsColumnIndex: -1,
-                    filtering: true,
+                    // filtering: true,
                     search: true,
                     sorting: true,
                     headerStyle: {
@@ -104,13 +82,13 @@ const Home = () => {
                   actions={[
                     {
                       icon: "visibility",
-                      tooltip: "Save User",
+                      tooltip: "Read More",
                       onClick: (event, rowData) =>
-                        alert("You saved " + rowData.name),
+                        router.push("/fault/" + rowData.id),
                     },
                   ]}
                   columns={columns}
-                  data={data}
+                  data={loadedData}
                   title="Search car Issues"
                 />
               </Paper>
