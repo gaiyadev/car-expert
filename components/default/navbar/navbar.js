@@ -16,6 +16,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import clsx from "clsx";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
+import Switch from "@material-ui/core/Switch";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,6 +40,10 @@ const Navbar = () => {
   const [state, setState] = React.useState({
     left: false,
   });
+  const [check, setCheck] = React.useState(false);
+  //  const handleChange = (event) => {
+  //    setCheck({ ...check, [event.target.name]: event.target.checked });
+  //  };
 
   const linksLIst = [
     {
@@ -52,6 +57,7 @@ const Navbar = () => {
       href: "/signup",
     },
   ];
+
   // Links List
   const list = (anchor) => (
     <div
@@ -89,7 +95,7 @@ const Navbar = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar color="primary" position="static">
         <Toolbar>
           <Hidden mdUp>
             <Box>
@@ -137,6 +143,16 @@ const Navbar = () => {
           </Hidden>
           {/* <Brightness4Icon />
           <WbSunnyIcon /> */}
+          {/* <Switch
+            checked={check}
+            onChange={() => {
+              setCheck(!check);
+              const mode = check === true ? "dark" : "light";
+              localStorage.setItem("mode", mode);
+            }}
+            name="checkedA"
+            inputProps={{ "aria-label": "secondary checkbox" }}
+          /> */}
         </Toolbar>
       </AppBar>
     </div>

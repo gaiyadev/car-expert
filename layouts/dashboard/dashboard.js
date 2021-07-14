@@ -251,10 +251,10 @@ const Dashboard = ({ children }) => {
                 onClick={async () => {
                   await dispatch(signOut());
                   router.push("/signin");
-                  Notify.success("Logout sucessfully");
+                  Notiflix.Report.success("Logout successfully", "");
                 }}
               >
-                LogOut
+                Logout
               </MenuItem>
             </Menu>
           </div>

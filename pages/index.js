@@ -26,8 +26,8 @@ const Home = ({ cars }) => {
     { title: "Fault", field: "symptoms" },
     { title: "Solution", field: "solution" },
     { title: "Causes", field: "causes" },
-    { title: "CarType", field: "carType" },
-    { title: "Type", field: "type" },
+    // { title: "CarType", field: "carType" },
+    // { title: "Type", field: "type" },
     // { title: "year Of Manufacture", field: "yearOfManufacture" },
   ];
   useEffect(() => {

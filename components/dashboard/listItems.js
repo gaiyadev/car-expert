@@ -38,7 +38,7 @@ export const mainListItems = (
       </ListItemIcon>
       <Link href="/dashboard/symptoms">
         <a>
-          <ListItemText primary="Add Symptoms" />
+          <ListItemText primary="Add Fault" />
         </a>
       </Link>
     </ListItem>

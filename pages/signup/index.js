@@ -20,6 +20,8 @@ import ProgressLoader from "../../components/default/progress/loading";
 import ErrorAlert from "../../components/default/form/errorAlert";
 import SuccessAlert from "../../components/default/form/successAlert";
 // regex
+import { useRouter } from "next/router";
+
 const usernameRegex = /^[A-Za-z]+$/;
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
 const passwordRegex = /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
@@ -42,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
+  const router = useRouter();
   const [values, setValues] = React.useState({
     showComfirmPassword: false,
     showPassword: false,
@@ -132,6 +134,7 @@ const SignUp = () => {
                   await dispatch(signUp(values));
                   setIsLoading(false);
                   setMessage("Account created successfully");
+                  router.push("/signin");
                 } catch (err) {
                   setMessage("");
                   setError(err.message);

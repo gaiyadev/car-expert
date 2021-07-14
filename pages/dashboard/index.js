@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchAllUserInfo } from "../../redux/actions/authActions";
+// import { fetchAllUserInfo } from "../../redux/actions/authActions";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import ScoreCard from "../../components/dashboard/scoreCard";
@@ -8,7 +8,9 @@ import PeopleIcon from "@material-ui/icons/People";
 import BugReportIcon from "@material-ui/icons/BugReport";
 import MergeTypeIcon from "@material-ui/icons/MergeType";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
+import { Notify } from "notiflix";
+
 const baseUrl = "http://localhost:5000/api/v1/cars";
 const baseUrl2 = "http://localhost:5000/api/v1/users";
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +54,9 @@ const Home = ({ cars, users }) => {
   //   };
   //   loadedUser();
   // }, [dispatch]);
-
+  useEffect(() => {
+    Notify.success("Welcome back");
+  }, []);
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
